@@ -13,13 +13,6 @@ const loginUser = async (req, res) => {
             .json({ message: "Email and password are required." });
     }
 
-    if (typeof password !== 'string' || password.length < 6) {
-        return res
-            .status(400)
-            .json({ message: 'Password must be at least 6 characters' });
-    }
-
-
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -51,6 +44,18 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res
+            .status(400)
+            .json({ message: "Name, email and password are required." });
+    }
+
+    if (typeof password !== 'string' || password.length < 6) {
+        return res
+            .status(400)
+            .json({ message: 'Password must be at least 6 characters' });
+    }
 
     try {
         const isExistingUser = await User.findOne({ email });
